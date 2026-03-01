@@ -18,6 +18,8 @@ const catppuccin = {
 }
 
 function hyperlink(url: string, label: string) {
+  if (!process.stdout.isTTY)
+    return label
   return `\x1B]8;;${url}\x07${label}\x1B]8;;\x07`
 }
 
@@ -33,10 +35,8 @@ const setup = [
   ['Shell', 'Zsh + Starship'],
   ['Theme', 'Catppuccin Mocha'],
   ['Font', 'JetBrains Mono Nerd Font'],
-  ['OS', 'macOS + Arch (server)'],
   ['AI', 'Claude Code'],
   ['Stack', 'TypeScript, Vue, Nuxt, Node'],
-  ['Infra', 'Docker, Tailscale, Coolify'],
 ] as const
 
 function displayUrl(url: string) {
@@ -146,12 +146,28 @@ async function showMenu() {
 
   const { default: open } = await import('open')
   const target = links.find(({ label }) => label.toLowerCase() === answer)
-  if (target)
-    await open(target.url)
+  if (!target)
+    throw new Error(`Unknown link target: ${answer}`)
+  await open(target.url)
 }
 
 async function main() {
   const flags = process.argv.slice(2)
+  const knownFlags = ['--json', '--setup', '--no-interactive', '--help']
+  const unknown = flags.find(flag => !knownFlags.includes(flag))
+  if (unknown) {
+    console.error(`Unknown flag: ${unknown}`)
+    process.exit(1)
+  }
+
+  if (flags.includes('--help')) {
+    console.log('Usage: npx kahl-dev [flags]')
+    console.log('  --setup           Show dev setup')
+    console.log('  --json            Structured JSON output')
+    console.log('  --no-interactive  Card only, no menu')
+    console.log('  --help            Show this help')
+    return
+  }
 
   if (flags.includes('--json')) {
     renderJson()
@@ -168,12 +184,12 @@ async function main() {
   if (flags.includes('--no-interactive'))
     return
 
-  if (process.stdout.isTTY)
+  if (process.stdout.isTTY && process.stdin.isTTY)
     await showMenu()
 }
 
 main().catch((error: unknown) => {
-  if (error instanceof Error && 'code' in error && (error as NodeJS.ErrnoException).code === 'ERR_USE_AFTER_CLOSE')
+  if (error instanceof Error && error.name === 'ExitPromptError')
     return
   console.error(error)
   process.exit(1)

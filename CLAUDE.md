@@ -15,11 +15,12 @@ Terminal business card — `npx kahl-dev`
 
 ## CLI Flags
 
-`--json` structured output | `--setup` show dev setup | `--no-interactive` card only
+`--json` structured output | `--setup` show dev setup | `--no-interactive` card only | `--help` usage info
 
 ## Gotchas
 
 - All deps are devDependencies — esbuild bundles everything into a single zero-dep `dist/index.js`
-- Shebang injected via esbuild `--banner:js`, not in source
+- Banner injects shebang + `createRequire` shim — needed because @inquirer/select has CJS deps that `require("stream")`
+- `bun build` ≠ `bun run build` — the former is bun's bundler, the latter runs our esbuild script
 - `prepublishOnly` runs build automatically before `npm publish`
 - Conventional commits enforced — commitlint rejects non-conforming messages

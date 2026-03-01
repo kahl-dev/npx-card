@@ -5,6 +5,14 @@
   "description": "Terminal business card — npx kahl-dev",
   "author": "Patrick Kahl <patrick@kahl.dev>",
   "license": "MIT",
+  "homepage": "https://github.com/kahl-dev/npx-card#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kahl-dev/npx-card.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kahl-dev/npx-card/issues"
+  },
   "keywords": [
     "business-card",
     "npx",
@@ -22,7 +30,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --banner:js='#!/usr/bin/env node'",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --banner:js='#!/usr/bin/env node\nimport{createRequire}from\"module\";const require=createRequire(import.meta.url);'",
     "dev": "bun run src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
