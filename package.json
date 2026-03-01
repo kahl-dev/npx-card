@@ -1,0 +1,49 @@
+{
+  "name": "kahl-dev",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Terminal business card — npx kahl-dev",
+  "author": "Patrick Kahl <patrick@kahl.dev>",
+  "license": "MIT",
+  "keywords": [
+    "business-card",
+    "npx",
+    "cli",
+    "catppuccin",
+    "terminal"
+  ],
+  "bin": {
+    "kahl-dev": "./dist/index.js"
+  },
+  "files": [
+    "dist/index.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --banner:js='#!/usr/bin/env node'",
+    "dev": "bun run src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepublishOnly": "bun run build",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^7.6.1",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@inquirer/select": "^5.1.0",
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
+    "esbuild": "^0.27.3",
+    "eslint": "^10.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.1",
+    "open": "^11.0.0",
+    "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix"
+  }
+}
