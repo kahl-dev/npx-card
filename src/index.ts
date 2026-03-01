@@ -124,6 +124,7 @@ async function showMenu() {
     message: catppuccin.mauve('What would you like to do?'),
     choices: [
       { name: 'Open GitHub', value: 'github' },
+      { name: 'Open Web', value: 'web' },
       { name: 'Open CodePen', value: 'codepen' },
       { name: 'Show my setup', value: 'setup' },
       { name: 'Quit', value: 'quit' },
